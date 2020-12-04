@@ -43,7 +43,9 @@ class ADB():
         print(self.currentScreenStatus)
         if (self.currentScreenStatus == 0):
             print("screen turning on")
-            os.system('adb shell input keyevent 26 && adb shell input touchscreen swipe 930 880 930 380 && adb shell input text 021202')
+            os.system('adb shell input keyevent 26')
+            time.sleep(3)
+            os.system('adb shell input touchscreen swipe 930 1000 930 380 && adb shell input text 021202')
 
     def switch_air_plane_mode(self, mode):
         self.turn_on_screen()
@@ -61,45 +63,46 @@ class ADB():
         command = f'adb shell getprop persist.radio.airplane_mode_on'
         self.currentAirPlaneStatus = int(subprocess.check_output(command).decode().replace("\r\n", ''))
         
-# class fbAuto():
-#     def __init__(self):
-#         super(fbAuto, self).__init__()
-#         self.driver = webdriver.Chrome()
+class fbAuto():
+    def __init__(self):
+        super(fbAuto, self).__init__()
+        self.driver = webdriver.Chrome()
 
 
 
-#     def enterhomepage(self):
-#         self.driver.get("https://www.facebook.com/")
-#         self.driver.find_element_by_xpath('//*[@id="u_0_2"]').click()
+    def enterhomepage(self):
+        self.driver.get("https://www.facebook.com/")
+        self.driver.find_element_by_xpath('//*[@id="u_0_2"]').click()
 
-#     def fill2From(self):
-#         time.sleep(2)
-#         self.driver.find_element_by_name("lastname").send_keys(self.name[0])
-#         self.driver.find_element_by_name("firstname").send_keys(self.name[1])
-#         self.driver.find_element_by_name("reg_email__").send_keys("xopiho6580@5y5u.com")
-#         self.driver.find_element_by_name("reg_email_confirmation__").send_keys("xopiho6580@5y5u.com")
-#         self.driver.find_element_by_xpath("//input[contains(@name, 'sex') and @value='1']").click()
-#         ####
+    def fill2Form(self):
+        time.sleep(2)
+        self.driver.find_element_by_name("lastname").send_keys(self.name[0])
+        self.driver.find_element_by_name("firstname").send_keys(self.name[1])
+        self.driver.find_element_by_name("reg_email__").send_keys(self.email)
+        self.driver.find_element_by_name("reg_email_confirmation__").send_keys(self.email)
+        self.driver.find_element_by_xpath("//input[contains(@name, 'sex') and @value='1']").click()
+        ####
 
-#         # Select birthday_D
-#         self.driver.find_element_by_xpath('//*[@id="day"]/option[2]').click()
+        # Select birthday_D
+        self.driver.find_element_by_xpath('//*[@id="day"]/option[2]').click()
 
-#         # Select birthday_M
-#         self.driver.find_element_by_xpath('//*[@id="month"]/option[2]').click()
+        # Select birthday_M
+        self.driver.find_element_by_xpath('//*[@id="month"]/option[2]').click()
 
-#         # Select birthday Y
-#         self.driver.find_element_by_xpath('//*[@id="year"]/option[contains(@value, "1990")]').click()
+        # Select birthday Y
+        self.driver.find_element_by_xpath('//*[@id="year"]/option[contains(@value, "1990")]').click()
 
-#         ####
+        ####
 
-#         self.driver.find_element_by_name("reg_passwd__").send_keys("Hacker001")
-#         self.driver.find_element_by_name("websubmit").click()
+        self.driver.find_element_by_name("reg_passwd__").send_keys("Hacker001")
+        self.driver.find_element_by_name("websubmit").click()
 
-#     def regAcc(self):
-#         self.getRandName()
-#         self.enterhomepage()
-#         self.getEmailAdress()
-#         self.fill2From()
+    def regAcc(self):
+
+        self.name = infomationHandle().getRandName()
+        self.enterhomepage()
+        self.email = infomationHandle().getEmailAdress()
+        self.fill2Form()
 
 class fbADB():
     def __init__(self):
@@ -122,7 +125,7 @@ class fbADB():
         os.system("adb install lite3.apk")
     
     def start_app(self):
-        os.system("adb shell monkey -p com.facebook.litg -c android.intent.category.LAUNCHER 1")
+        os.system("adb shell monkey -p com.facebook.litn -c android.intent.category.LAUNCHER 1")
         time.sleep(1)
         self.tap(988, 2280)
         time.sleep(1)
@@ -131,22 +134,22 @@ class fbADB():
         time.sleep(3)
 
     def reg(self):
-
+        name = infomationHandle().getRandName()
         self.tap(882, 1183)
-        self.tap(579, 974)
-        time.sleep(3)
+        self.tap(579, 974)       # Press Create New Account
+        time.sleep(3) 
         self.tap(472, 1100)
-
+        self.tap(569, 1021)
         time.sleep(3)
         ## Enter Family name
         self.tap(342, 536)
-        self.type("Xuan\ Tun")
+        self.type(name[0])
 
         time.sleep(1)
         ## Enter Name
         self.tap(869, 548)
         self.tap(869, 548)
-        self.type("Nguyen")
+        self.type(name[1] + "\ " + name[2])
 
         ##
         time.sleep(2)
@@ -167,7 +170,7 @@ class fbADB():
         #
         mail = infomationHandle().getEmailAdress()
         print(mail)
-        self.type(mail)
+        self.type('fijjiz@1sgmail.ga')
 
         self.tap(748, 713)
         self.tap(748, 713)
@@ -178,6 +181,7 @@ class fbADB():
         ## Birthday_D
         self.tap(84, 566)
         self.tap(84, 566)
+        time.sleep(2)
         self.tap(171, 1588)     # 1
         ## Birthday_M
         self.tap(135, 574)      
@@ -190,11 +194,11 @@ class fbADB():
         self.tap(536, 1958)  # 0
 
         self.tap(330, 693)
-
+        self.tap(87, 842)
         print(">> FILLING SEX")
         self.tap(1001, 533)
         self.tap(368, 549)
-        os.system('pause')
+        # os.system('pause')
 
         print(">> FILLING PASS")
         ### FILL PASS
@@ -203,7 +207,7 @@ class fbADB():
         self.type("Hacker001")
         
         self.tap(251, 930)
-
+        self.tap(169, 856)
         #### WAIT BRO ^_^
 
         self.tap(847, 1938)
@@ -227,17 +231,17 @@ class fbADB():
             self.getPIN(mail)
 
     def delete_apk(self):
-        os.system("adb shell pm uninstall -k --user 0 com.facebook.litg")
-# adb = ADB()
-# fbAuto = fbAuto()
-# fbAuto.regAcc()
+        os.system("adb shell pm uninstall -k --user 0 com.facebook.litn")
+adb = ADB()
+fbAuto = fbAuto()
+fbAuto.regAcc()
+os.system('pause')
+adb.switch_air_plane_mode(1)
+# adbfb = fbADB()
 # adb.switch_air_plane_mode(0)
-# os.system('pause')
+# adbfb.install_apk()
+# adbfb.start_app()
+# adbfb.reg()
+# adb.switch_air_plane_mode(1)
 
-adbfb = fbADB()
-adbfb.install_apk()
-adbfb.start_app()
-adbfb.reg()
-
-
-adbfb.delete_apk()
+# adbfb.delete_apk()
