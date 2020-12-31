@@ -1,6 +1,18 @@
 from adb import ADB
 import time
+import requests
 
+class infomationHandle():
+    def __init__(self):
+        super(infomationHandle, self).__init__()
+    
+    def getRandName(self):
+        r = requests.get("https://www.fakeaddressgenerator.com/All_countries/address/country/Vietnam")
+        reg = r"value='(.*?)'\/>"
+        return re.findall(reg, r.text)[0].replace("&nbsp;", ' ').split(" ")
+
+    def getEmailAdress(self):
+        return requests.get("https://mailtamthoi.net/api/create?key=ezgwapqKHy8eJqKUEDQOyPJ5akxFVU").text
 
 class fbAuto():
     def __init__(self, adb):
@@ -87,11 +99,13 @@ class fbAuto():
         self.adb.tap(737, 1307)
 
         print(">> Done")
-if (__name__ == '__main__'):
+
+if __name__ == '__main__':
     adb = ADB()
     # adb.switch_air_plane_mode(1)
     adb.turn_on_screen()
 
     fb = fbAuto(adb)
     time.sleep(5)
-    fb.createAccount("Nam\ Tran", "Nguyen", 1, "fb3112@noel2020.us", "Hacker001")
+    name = infomationHandle().getRandName()
+    fb.createAccount(name[1] + "\ " + name[2], name[0], 1, infomationHandle().getEmailAdress(), "Hacker001")
